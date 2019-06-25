@@ -1,0 +1,17 @@
+.logo {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.logo-left {
+  background-color: #ff6b6b;
+  padding: 3px 5px 3px 8px;
+  border-radius: 0.3em;
+}
+
+.logo-right {
+  padding: 3px 8px 3px 3px;
+  margin-left: -5px;
+  border-radius: 0.3em;
+}
