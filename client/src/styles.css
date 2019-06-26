@@ -8,7 +8,7 @@ body {
   line-height: 1.4;
   font-size: 16px;
   text-align: left;
-  background-color: #1c2228;
+  background-color: #3c4248;
   color: #f7fff7;
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 400;
@@ -28,6 +28,31 @@ p {
 
 .box-shadow {
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2), 0 5px 6px rgba(0, 0, 0, 0.3);
+}
+
+.section-container {
+  padding: 30px;
+}
+
+.card-theme  {
+  background-color: #191f26;
+  border: none;
+  border-radius: 0.18rem;
+}
+
+.card-heading-theme {
+  color: #eee;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+}
+
+.card-body-theme {
+  background-color: #494f56;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
 }
 
 .section-container {
