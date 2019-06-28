@@ -24,12 +24,15 @@ namespace Webapi
 
       services.AddEntityFrameworkNpgsql().AddDbContext<ApiContext>(options =>
         options.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"]));
+
       // services.AddDbContext<ApiContext>(options =>
-      //   options.UseNpsql(Configuration["ConnectionStrings:DefaultConnection"]));
+      //   options.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"]));
+
+      services.AddTransient<DataSeed>();
     }
 
     // Middlewares
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env, DataSeed seed)
     {
       if (env.IsDevelopment())
       {
@@ -39,6 +42,8 @@ namespace Webapi
       {
         app.UseHsts();
       }
+
+      seed.SeedData(20, 1000);
 
       app.UseHttpsRedirection();
       app.UseMvc();
