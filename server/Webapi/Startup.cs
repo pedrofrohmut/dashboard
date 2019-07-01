@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Webapi.Models;
 using Microsoft.EntityFrameworkCore;
+using Webapi.Services;
+using Webapi.Services.Implementations;
 
 namespace Webapi
 {
@@ -25,10 +27,10 @@ namespace Webapi
       services.AddEntityFrameworkNpgsql().AddDbContext<ApiContext>(options =>
         options.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"]));
 
-      // services.AddDbContext<ApiContext>(options =>
-      //   options.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"]));
-
       services.AddTransient<DataSeed>();
+
+      services.AddScoped<ICustomersService, CustomersService>();
+      services.AddScoped<IOrdersService, OrdersService>();
     }
 
     // Middlewares
@@ -46,7 +48,8 @@ namespace Webapi
       seed.SeedData(20, 1000);
 
       app.UseHttpsRedirection();
-      app.UseMvc();
+
+      app.UseMvc(routes => routes.MapRoute("default", "api/{controller}/{action}/{id?}"));
     }
   }
 }
