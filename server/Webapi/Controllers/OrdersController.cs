@@ -17,14 +17,23 @@ namespace Webapi.Controllers
     }
 
     /*
-      GET api/orders/total_by_customer
+      GET api/orders/total_by_customer/{numberOfCustomers}
     */
-    [HttpGet("total_by_customer", Name = "GetTotalByCustomer")]
-    public async Task<ActionResult> GetTotalByCustomer()
+    [HttpGet("total_by_customer/{numberOfCustomers:int?}", Name = "GetTotalByCustomer")]
+    public async Task<ActionResult> GetTotalByCustomer(int numberOfCustomers)
     {
+      if (numberOfCustomers > 0)
+      {
+        return Ok(new
+        {
+          data = await this.ordersService
+            .GetSumOfTotalsByCustomerAsync(numberOfCustomers)
+        });
+      }
+
       return Ok(new
       {
-        Data = await this.ordersService.GetSumOfTotalsByCustomerAsync()
+        data = await this.ordersService.GetAllSumOfTotalsByCustomerAsync()
       });
     }
 
@@ -36,14 +45,14 @@ namespace Webapi.Controllers
     {
       if (id < 0)
       {
-        return BadRequest(new { Message = "Invalid Id for Order" });
+        return BadRequest(new { message = "Invalid Id for Order" });
       }
 
-      var data = await this.ordersService.GetById(id);
+      var data = await this.ordersService.GetByIdAsync(id);
 
       if (data == null)
       {
-        return NotFound(new { Message = "No user found with the passed Id" });
+        return NotFound(new { message = "No user found with the passed Id" });
       }
 
       return Ok(new { data });
@@ -57,7 +66,7 @@ namespace Webapi.Controllers
     {
       return Ok(new
       {
-        data = await this.ordersService.GetSumOfTotalsByStateAsync()
+        data = await this.ordersService.GetAllSumOfTotalsByStateAsync()
       });
     }
 
@@ -71,14 +80,14 @@ namespace Webapi.Controllers
 
       if (pageIndex < 1 || pageSize < 1 || pageIndex > pagesCount)
       {
-        return BadRequest("Invalid number for pageIndex and/or page Size");
+        return BadRequest(new
+        {
+          message = "Invalid number for pageIndex and/or page Size"
+        });
       }
 
-      return Ok(new
-      {
-        data = await this.ordersService.GetPageAsync(pageIndex, pageSize),
-        pages_count = pagesCount
-      });
+      var data = await this.ordersService.GetPageAsync(pageIndex, pageSize);
+      return Ok(new { data, pagesCount });
     }
   }
 }

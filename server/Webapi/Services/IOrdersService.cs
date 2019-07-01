@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Webapi.Models;
+using Webapi.JsonModels;
 
 namespace Webapi.Services
 {
@@ -21,17 +22,23 @@ namespace Webapi.Services
       Return a list of objects with state name and the sum of the total from the
       orders of that state.
     */
-    Task<IEnumerable<object>> GetSumOfTotalsByStateAsync();
+    Task<IEnumerable<TotalFromStates>> GetAllSumOfTotalsByStateAsync();
 
     /*
       Return a list of object with the customer name and the sum of the total from
-      the orders of that customer
+      the orders of that customer limited by the number of customers.
     */
-    Task<IEnumerable<object>> GetSumOfTotalsByCustomerAsync();
+    Task<IEnumerable<TotalFromCustomers>> GetSumOfTotalsByCustomerAsync(int numberOfCustomers);
+
+    /*
+      Return a list of object with the customer name and the sum of the total from
+      the orders of that customer.
+    */
+    Task<IEnumerable<TotalFromCustomers>> GetAllSumOfTotalsByCustomerAsync();
 
     /*
       Returns Order by its id
     */
-    Task<Order> GetById(int id);
+    Task<Order> GetByIdAsync(int id);
   }
 }

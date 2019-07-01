@@ -3,6 +3,7 @@ using Webapi.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Webapi.JsonModels;
 
 namespace Webapi.Services.Implementations
 {
@@ -15,13 +16,7 @@ namespace Webapi.Services.Implementations
       this.context = context;
     }
 
-    public async Task<Order> GetById(int id) =>
-      await this.context.Orders
-        .Include(order => order.Customer)
-        .AsNoTracking()
-        .FirstOrDefaultAsync(order => order.Id == id);
-
-    public async Task<IEnumerable<object>> GetSumOfTotalsByCustomerAsync()
+    public async Task<IEnumerable<TotalFromCustomers>> GetAllSumOfTotalsByCustomerAsync()
     {
       // Async Wrapper For Lack of Async Implementation
       var result = Task.Run(() =>
@@ -33,9 +28,9 @@ namespace Webapi.Services.Implementations
           .ToList();
 
         return groupedByCustomer
-          .Select(group => new
+          .Select(group => new TotalFromCustomers
           {
-            Customer = group.Key,
+            CustomerName = group.Key,
             CustomerTotal = group.Sum(order => order.Total)
           })
           .OrderByDescending(obj => obj.CustomerTotal)
@@ -45,7 +40,40 @@ namespace Webapi.Services.Implementations
       return await result;
     }
 
-    public async Task<IEnumerable<object>> GetSumOfTotalsByStateAsync()
+    public async Task<Order> GetByIdAsync(int id) =>
+      await this.context.Orders
+        .Include(order => order.Customer)
+        .AsNoTracking()
+        .FirstOrDefaultAsync(order => order.Id == id);
+
+    public async Task<IEnumerable<TotalFromCustomers>> GetSumOfTotalsByCustomerAsync(
+      int numberOfCustomers
+    )
+    {
+      // Async Wrapper For Lack of Async Implementation
+      var result = Task.Run(() =>
+      {
+        var groupedByCustomer = this.context.Orders
+          .Include(order => order.Customer)
+          .GroupBy(order => order.Customer.Name)
+          .AsNoTracking()
+          .ToList();
+
+        return groupedByCustomer
+          .Take(numberOfCustomers)
+          .Select(group => new TotalFromCustomers
+          {
+            CustomerName = group.Key,
+            CustomerTotal = group.Sum(order => order.Total)
+          })
+          .OrderByDescending(obj => obj.CustomerTotal)
+          .ToList();
+      });
+
+      return await result;
+    }
+
+    public async Task<IEnumerable<TotalFromStates>> GetAllSumOfTotalsByStateAsync()
     {
       // Async Wrapper For Lack of Async Implementation
       var result = Task.Run(() =>
@@ -57,9 +85,9 @@ namespace Webapi.Services.Implementations
           .ToList();
 
         return groupByState
-          .Select(group => new
+          .Select(group => new TotalFromStates
           {
-            State = group.Key,
+            StateName = group.Key,
             StateTotal = group.Sum(order => order.Total)
           })
           .OrderByDescending(obj => obj.StateTotal)

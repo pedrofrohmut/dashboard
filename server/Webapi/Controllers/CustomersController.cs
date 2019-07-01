@@ -34,18 +34,12 @@ namespace Webapi.Controllers
     [HttpGet("{id:int}", Name = "GetCustomerById")]
     public async Task<ActionResult<Customer>> GetById(int id)
     {
-      var customer = await this.customerService.GetByIdAsync(id);
-      if (customer == null)
+      var data = await this.customerService.GetByIdAsync(id);
+      if (data == null)
       {
-        return NotFound(new
-        {
-          message = "No customer found with passed Id"
-        });
+        return NotFound(new { message = "No customer found with passed Id" });
       }
-      return Ok(new
-      {
-        data = customer
-      });
+      return Ok(new { data });
     }
 
     /*
@@ -61,10 +55,7 @@ namespace Webapi.Controllers
     {
       if (newCustomer == null)
       {
-        return BadRequest(new
-        {
-          message = "Invalid request. The User was Null."
-        });
+        return BadRequest(new { message = "Invalid request. The User was Null." });
       }
       await this.customerService.CreateAsync(newCustomer);
       return CreatedAtRoute("GetCustomerById", new { id = newCustomer.Id }, newCustomer);
@@ -100,10 +91,7 @@ namespace Webapi.Controllers
       }
 
       await this.customerService.UpdateAsync(updatedCustomer);
-      return Ok(new
-      {
-        message = "Customer Updated"
-      });
+      return Ok(new { message = "Customer Updated" });
     }
 
     /*

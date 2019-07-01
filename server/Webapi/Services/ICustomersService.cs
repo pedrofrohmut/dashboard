@@ -7,17 +7,19 @@ namespace Webapi.Services
 {
   public interface ICustomersService
   {
-    // Create
+    // Create a customer.
     Task<bool> CreateAsync(Customer newCustomer);
 
-    // Read
+    // Get all customers.
     Task<IEnumerable<Customer>> GetAllAsync();
+
+    // Get customer by its id.
     Task<Customer> GetByIdAsync(int id);
 
-    // Update
+    // Update a customer.
     Task<bool> UpdateAsync(Customer updatedCustomer);
 
-    // Delete
+    // Delete a customer.
     Task<bool> DeleteAsync(Customer customerToDelete);
   }
 }

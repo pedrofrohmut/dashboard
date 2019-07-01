@@ -22,6 +22,16 @@ namespace Webapi
     // Services
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddCors(options =>
+      {
+        options.AddPolicy(
+          "CorsPolicy",
+          config =>
+            config.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+        );
+      });
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
       services.AddEntityFrameworkNpgsql().AddDbContext<ApiContext>(options =>
@@ -39,6 +49,7 @@ namespace Webapi
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
+        app.UseCors("CorsPolicy");
       }
       else
       {
