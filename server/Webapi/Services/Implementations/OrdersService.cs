@@ -15,10 +15,11 @@ namespace Webapi.Services.Implementations
       this.context = context;
     }
 
-    public Task<Order> GetById(int id)
-    {
-      throw new System.NotImplementedException();
-    }
+    public async Task<Order> GetById(int id) =>
+      await this.context.Orders
+        .Include(order => order.Customer)
+        .AsNoTracking()
+        .FirstOrDefaultAsync(order => order.Id == id);
 
     public async Task<IEnumerable<object>> GetSumOfTotalsByCustomerAsync()
     {
@@ -26,9 +27,10 @@ namespace Webapi.Services.Implementations
       var result = Task.Run(() =>
       {
         var groupedByCustomer = this.context.Orders
-            .Include(order => order.Customer)
-            .GroupBy(order => order.Customer.Name)
-            .ToList();
+          .Include(order => order.Customer)
+          .GroupBy(order => order.Customer.Name)
+          .AsNoTracking()
+          .ToList();
 
         return groupedByCustomer
           .Select(group => new
@@ -51,6 +53,7 @@ namespace Webapi.Services.Implementations
         var groupByState = this.context.Orders
           .Include(order => order.Customer)
           .GroupBy(order => order.Customer.State)
+          .AsNoTracking()
           .ToList();
 
         return groupByState

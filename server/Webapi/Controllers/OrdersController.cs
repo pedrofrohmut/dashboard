@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Webapi.Services;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Webapi.Models;
 
 namespace Webapi.Controllers
