@@ -19,14 +19,17 @@ const getPagesChunk = (currentPage: number, pagesCount: number) => {
   const chunkSlice = Math.floor(chunkSize / 2)
 
   if (currentPage - chunkSlice <= 0) {
-    return getPagesChunkFor(chunkSlice + 1, chunkSize)
+    const midVal = chunkSlice + 1
+    return getPagesChunkFor(midVal, chunkSize)
   }
 
-  if (currentPage + 5 > pagesCount) {
-    return getPagesChunkFor(pagesCount - chunkSize - 1, chunkSize)
+  if (currentPage >= pagesCount - chunkSlice) {
+    const midVal = pagesCount - chunkSlice
+    return getPagesChunkFor(midVal, chunkSize)
   }
 
-  return getPagesChunkFor(currentPage, chunkSize)
+  const midVal = currentPage
+  return getPagesChunkFor(midVal, chunkSize)
 }
 
 @Component({
@@ -76,6 +79,7 @@ export class SectionOrdersComponent implements OnInit {
     if (pageNumber <= this.pagesCount && pageNumber > 0) {
       this.currentPage = pageNumber
       this.getOrdersPage(this.currentPage, this.pageSize)
+      this.pagesChunk = getPagesChunk(this.currentPage, this.pagesCount)
     }
   }
 }

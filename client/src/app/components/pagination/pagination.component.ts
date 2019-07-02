@@ -58,7 +58,6 @@ export class PaginationComponent implements OnInit {
 
   onNext() {
     this.onEmitNext.emit()
-    console.log(this.pagesChunk)
   }
 
   onToPage(pageNumber: number) {
