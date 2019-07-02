@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using Webapi.JsonModels;
+using System;
 
 namespace Webapi.Services.Implementations
 {
@@ -106,8 +107,12 @@ namespace Webapi.Services.Implementations
         .AsNoTracking()
         .ToListAsync();
 
-    public async Task<int> GetPagesCountAsync(int pageSize) =>
-      await this.context.Orders
-        .CountAsync();
+    public async Task<int> GetPagesCountAsync(int pageSize)
+    {
+      int ordersCount = await this.context.Orders.CountAsync();
+      // extra step to make compiler work
+      double val = ordersCount / pageSize;
+      return (int) Math.Ceiling(val);
+    }
   }
 }

@@ -40,7 +40,7 @@ namespace Webapi.Controllers
     /*
       GET api/orders/{id}
     */
-    [HttpGet("{id:int}", Name = "GetById")]
+    [HttpGet("{id:int}", Name = "GetOrdersById")]
     public async Task<ActionResult<Order>> GetById(int id)
     {
       if (id < 0)
