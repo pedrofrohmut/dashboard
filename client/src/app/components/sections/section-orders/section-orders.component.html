@@ -5,10 +5,10 @@
     <tr>
       <th>Id</th>
       <th>Customers</th>
-      <th>Amount</th>
-      <th>Order Placed</th>
-      <th>Order Fulfilled</th>
-      <th>Status</th>
+      <th>Total</th>
+      <th>Placed</th>
+      <th>Completed</th>
+      <!-- <th>Status</th> -->
     </tr>
   </thead>
 
@@ -16,10 +16,20 @@
     <tr *ngFor="let order of orders">
       <td>{{ order.id }}</td>
       <td>{{ order.customer.name }}</td>
-      <td>{{ order.amount }}</td>
+      <td>{{ order.total }}</td>
       <td>{{ order.placed | date: "short" }}</td>
-      <td>{{ order.fulfilled | date: "short" }}</td>
-      <td>{{ order.status }}</td>
+      <td>{{ order.completed | date: "short" }}</td>
+      <!-- <td>{{ order.status }}</td> -->
     </tr>
   </tbody>
 </table>
+
+<app-pagination
+  (onEmitToPage)="handleToPage($event)"
+  (onEmitPrevius)="handlePrevius()"
+  (onEmitNext)="handleNext()"
+  [currentPage]="currentPage"
+  [pageSize]="pageSize"
+  [pagesCount]="pagesCount"
+  [isLoading]="isLoading"
+></app-pagination>
